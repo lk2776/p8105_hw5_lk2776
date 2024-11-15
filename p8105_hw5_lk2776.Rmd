@@ -50,7 +50,7 @@ Repeat the above for 𝜇 = {1, 2, 3, 4, 5, 6}
 sim_results_df_b =
   expand_grid(
     #sample_size = 30,
-    mu_given = c(1,2,3,4,5,6),
+    mu_given = c(0,1,2,3,4,5,6),
     iter = 1:5000
   ) |>
   mutate(
@@ -59,7 +59,25 @@ sim_results_df_b =
   unnest(estimate_df)
 ```
 
+The plot below shows the a
+
+As true mu increases, the power of the test increased. 
+effect size = sample mean - hypothesized mean(mu = 0)
+
 ```{r}
 
+new_df = sim_results_df_b |>
+  mutate(reject_null = p.value < 0.05) |>
+  group_by(mu_given) |>
+  summarise(power_calc = mean(reject_null)) #power for each value of mu 
+  
+ggplot(new_df,aes(x = mu_given, y = power_calc)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "power against true value of mu",
+    x = "true mu",
+    y = "power"
+  )
 ```
 
