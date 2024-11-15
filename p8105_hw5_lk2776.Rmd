@@ -17,16 +17,23 @@ broom::tidy to clean the output of t.test .
 ```{r}
 library(tidyverse)
 library(purrr)
+library(broom)
 ```
 
 ```{r}
-sim_mean_sd = function(n, mu = 0, sigma = 5) {
+#function
+sim_mean_sd = function(n, mu, sigma) {
   sim_data = tibble(
     x = rnorm(n, mean = mu, sd = sigma),
 )
-  sim_data |>
-    summarize(
-      mu_hat = mean(x),
+  
+  t_test_out <- t.test(sim_data$x,mu = mu)
+  
+  tidy(t_test_out)|>
+    select(estimate, p.value)
+  #sim_data |>
+    #summarize(
+      #mu_hat = mean(x),
       #sigma_hat = sd(x),
     )
 }
