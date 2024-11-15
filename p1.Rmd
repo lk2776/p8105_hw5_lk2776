@@ -10,8 +10,13 @@ Write a function that, for a fixed group size, randomly draws “birthdays” fo
 
 
 ```{r}
-birthd_func = function(group_size) {
-  
+b_day_func = function(group_size) {
+  #random birthday generation for each group
+  sim_b_data = tibble(
+    b_days = sample(1:365, group_size, replace=TRUE))
+
 }
+
+b_day_func(5)
 ```
 
