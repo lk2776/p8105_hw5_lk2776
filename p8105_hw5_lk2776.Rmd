@@ -92,8 +92,15 @@ new_df_b = sim_results_df_b |>
 
 
 ggplot(new_df_b, aes(x = mu_given))+
-  geom_line(aes(y=mean_mu_hat),color="blue") +
-  geom_line(aes(y=mean_mu_hat_rejected), color="orange")
+  geom_line(aes(y=mean_mu_hat),color="blue", size = 1) +
+  geom_line(aes(y=mean_mu_hat_rejected), color="orange", size =1)+
+  labs(
+    title = "average mu-hat vs true mu",
+    x = "true mu",
+    y = "average mu-hat", 
+  ) +
+  annotate("text", x = 4.7, y = 2, label = "samples with rejected null", color = "orange") +
+  annotate("text", x = 4.9, y = 2.25, label = "all samples", color = "blue")
 
 ```
 
