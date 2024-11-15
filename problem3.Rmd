@@ -19,9 +19,6 @@ data = read_csv("./data/homicide-data.csv") |>
   mutate(city_state = paste(city, state, sep="_"), 
          not_solved = if_else(
            disposition %in% c("Closed without arrest", "Open/No arrest"), 1, 0))  # if match, add 1, otherwise, add 0. 
-```
-
-```{r}
 summary_data = data |>
   group_by(city_state) |>
   summarize(
@@ -46,26 +43,12 @@ tidy(prop_test_out) |>
 ```
 
 ```{r}
-
-
 prop_results_all_cities = summary_data |>
-  mutate(prop_test_out_all = map2(unsolved_homicides,total_number_of_homicides, \(x,y) prop.test(x,y))) |>
-  #unnest(prop_test_out_all) 
-  mutate(tidy_df = map(prop_test_out_all,tidy)) |>
+  mutate(prop_test_out_all = map2(unsolved_homicides,total_number_of_homicides, \(x,y) prop.test(x,y)),
+         tidy_df = map(prop_test_out_all,tidy))|>
   unnest(tidy_df) |>
   select(city_state,estimate,conf.low,conf.high)
   
-  
-  
-  
-  #tidy()
-  #unnest()
-  
-
-```
-
-
-```{r}
 prop_results_all_cities |>
  mutate(city_state = fct_reorder(city_state,estimate)) |>
   ggplot(aes(x = city_state, y = estimate)) + 
@@ -78,6 +61,13 @@ prop_results_all_cities |>
     y = "city and state", 
   )
   
+  
+
+```
+
+
+```{r}
+
 ```
 
 
