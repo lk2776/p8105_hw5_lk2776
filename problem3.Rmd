@@ -10,3 +10,12 @@ library(purrr)
 library(broom)
 ```
 
+
+```{r}
+data = read_csv("./data/homicide-data.csv") |>
+  janitor::clean_names() |>
+  mutate(city_state = paste(city, state, sep="_")) #add new variable
+         
+
+```
+
