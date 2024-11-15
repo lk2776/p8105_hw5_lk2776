@@ -4,7 +4,7 @@ output: html_document
 date: "2024-11-15"
 ---
 
-#problem1 - from p8104 course
+#problem1 - adapted from p8104 course
 
 Write a function that, for a fixed group size, randomly draws “birthdays” for each person; checks whether there are duplicate birthdays in the group; and returns TRUE or FALSE based on the result.
 
@@ -15,12 +15,27 @@ b_day_func = function(group_size) {
   sim_b_data = tibble(
     b_days = sample(1:365, group_size, replace=TRUE))
   
-  any(duplicated(sim_b_data$b_days))
+  any(duplicated(sim_b_data$b_days)) #check - one output 
 }
 
 b_day_func(1)
 b_day_func(5)
 b_day_func(10)
+
+```
+
+Next, run this function 10000 times for each group size between 2 and 50. For each group size, compute the probability that at least two people in the group will share a birthday by averaging across the 10000 simulation runs. Make a plot showing the probability as a function of group size, and comment on your results.
+
+```{r}
+group_sizes = seq(2,50)
+iter = 1:10000
+
+sim_results_df_p1 = 
+  expand_grid(
+    group_sizes = seq(2,50),
+    iter = 1:10000
+  ) |>
+  mutate(result)
 
 ```
 
