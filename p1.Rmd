@@ -35,7 +35,9 @@ sim_results_df_p1 =
     group_sizes = seq(2,50),
     iter = 1:10000
   ) |>
-  mutate(result)
+  mutate(
+    result
+    )
 
 ```
 
