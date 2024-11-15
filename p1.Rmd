@@ -36,8 +36,13 @@ sim_results_df_p1 =
     iter = 1:10000
   ) |>
   mutate(
-    result
-    )
+    output_p1 = map(group_sizes, b_day_func)
+    ) |>
+  unnest(output_p1)
+
+prob-results_df_p1 = sim_results_df_p1 |>
+  group_by(group_sizes) |>
+  summarize(prob_dup = mean(output_p1))
 
 ```
 
