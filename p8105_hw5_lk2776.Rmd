@@ -42,4 +42,11 @@ sim_results_df =
   unnest(estimate_df)
 ```
 
+```{r}
+broom::tidy 
+x <- c(1,2,3)
+z = t.test(x)
+broom::tidy(z)
+```
+
 Repeat the above for 𝜇 = {1, 2, 3, 4, 5, 6}, and complete the following:
