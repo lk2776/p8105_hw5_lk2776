@@ -1,0 +1,7 @@
+---
+title: "p8105_hw5_lk2776"
+output: html_document
+date: "2024-11-05"
+---
+
+#Problem 2 
