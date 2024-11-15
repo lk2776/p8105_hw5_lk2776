@@ -68,14 +68,14 @@ prop_results_all_cities = summary_data |>
 ```{r}
 prop_results_all_cities |>
  mutate(city_state = fct_reorder(city_state,estimate)) |>
-  ggplot(df_10, aes(x = city_state, y = estimate)) + 
+  ggplot(aes(x = city_state, y = estimate)) + 
   geom_point(color="purple") +
   geom_errorbar(aes(ymin=conf.low, ymax = conf.high), color = "orange") +
-  coord_flip() |>
+  coord_flip() + #to facilitate the viewing - otherwise - x-axis crowded
   labs(
-    title = "average mu-hat vs true mu",
-    x = "true mu",
-    y = "average mu-hat", 
+    title = "proportion of unsolved homicides",
+    x = "estimate",
+    y = "city and state", 
   )
   
 ```
