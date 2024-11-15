@@ -20,6 +20,6 @@ b_day_func = function(group_size) {
 
 b_day_func(5)
 b_day_func(15)
-b_
+b_day_func(1)
 ```
 
