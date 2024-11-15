@@ -59,10 +59,11 @@ sim_results_df_b =
   unnest(estimate_df)
 ```
 
-The plot below shows the a
+The plot below shows the 
 
-As true mu increases, the power of the test increased. 
+As true mu increases, the power of the test increased and reached 1. . 
 effect size = sample mean - hypothesized mean(mu = 0)
+as true mean increases, the effect size increases, the power of the test also increases and test is more likely to correctly reject the null hypothesis. 
 
 ```{r}
 
