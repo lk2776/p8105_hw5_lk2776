@@ -1,0 +1,17 @@
+---
+title: "p1"
+output: html_document
+date: "2024-11-15"
+---
+
+#problem1 - from p8104 course
+
+Write a function that, for a fixed group size, randomly draws “birthdays” for each person; checks whether there are duplicate birthdays in the group; and returns TRUE or FALSE based on the result.
+
+
+```{r}
+birthd_func = function(group_size) {
+  
+}
+```
+
