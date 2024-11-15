@@ -73,7 +73,6 @@ sim_results_df_all <- bind_rows(sim_results_df,sim_results_df_b)
 
 As shown in the plot below, as the true value of mu increases, the power of the test also increases, reaching 1. Effect size is defined as the difference between sample mean and the hypothesized mean(mu = 0). Therefore, as the true mean increases, the effect size becomes larger. This increase in effect size, increases the ability of the test to correctly detect the true effect and correctly reject the null hypothesis. As a result, power of the test also increases with larger true mean values. 
 
-
 ```{r}
 new_df = sim_results_df_all |>
   mutate(reject_null = p.value < 0.05) |>
@@ -90,7 +89,9 @@ ggplot(new_df,aes(x = mu_given, y = power_calc)) +
   )
 ```
 
-As shown in the plot below, the sample average of mu-hat across tests for which is rejected is not to equal to true value of mu at low value of mu. 
+As shown in the plot below, the sample average of mu-hat across tests for which null is rejected (orange line) is not ~equal to true value of mu due to selection bias (selecting tests where null hypothesis is rejected, this usually happens when mu-hat is farther away from hypothesized mean). By selecting only significant results, the analysis failed to consider the non-significant results that may contain mu-hat closer to true mu.  
+
+
 ```{r}
 new_df_b = sim_results_df_b |>
   group_by(mu_given) |>
@@ -110,7 +111,6 @@ ggplot(new_df_b, aes(x = mu_given))+
   annotate("text", x = 4.9, y = 2.25, label = "all samples", color = "blue")
 
 ```
-
 
 ## problem3
 
@@ -145,7 +145,7 @@ summary_data_baltimore = summary_data |>
 
 prop_test_out_balti = prop.test(summary_data_baltimore$unsolved_homicides,summary_data_baltimore$total_number_of_homicides)
 
-tidy(prop_test_out) |>
+tidy(prop_test_out_balti) |>
   select(estimate,conf.low,conf.high) |>
   knitr::kable()
          
