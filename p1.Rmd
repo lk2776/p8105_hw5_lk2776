@@ -40,9 +40,10 @@ sim_results_df_p1 =
     ) |>
   unnest(output_p1)
 
-prob-results_df_p1 = sim_results_df_p1 |>
+plot_data = sim_results_df_p1 |>
   group_by(group_sizes) |>
   summarize(prob_dup = mean(output_p1))
+
 
 ```
 
