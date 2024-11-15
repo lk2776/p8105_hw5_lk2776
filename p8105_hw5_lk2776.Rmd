@@ -25,7 +25,7 @@ library(broom)
 #function
 sim_mean_sd = function(n, mu = 0, sigma = 5) {
   sim_data = tibble(
-    x = rnorm(n, mean = mu, sd = sigma),
+    x = rnorm(n, mean = mu, sd = sigma)
 )
   
   t_test_out <- t.test(sim_data$x,mu = mu)
@@ -41,16 +41,9 @@ sim_results_df =
     iter = 1:5000
   ) |>
   mutate(
-    estimate_df = map(sample_size,\(x) sim_mean_sd(x))
+    estimate_df = map(sample_size, sim_mean_sd)
   ) |>
   unnest(estimate_df)
-```
-
-```{r}
-broom::tidy 
-x <- c(1,2,3)
-z = t.test(x)
-broom::tidy(z)
 ```
 
 Repeat the above for 𝜇 = {1, 2, 3, 4, 5, 6}, and complete the following:
