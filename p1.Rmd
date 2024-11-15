@@ -18,8 +18,9 @@ b_day_func = function(group_size) {
   any(duplicated(sim_b_data$b_days))
 }
 
-b_day_func(5)
-b_day_func(15)
 b_day_func(1)
+b_day_func(5)
+b_day_func(10)
+
 ```
 
