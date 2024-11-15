@@ -10,36 +10,43 @@ library(purrr)
 library(broom)
 ```
 
+## problem3
 
 ```{r}
 #read data
 data = read_csv("./data/homicide-data.csv") |>
   janitor::clean_names() |>
-  drop_na() |>
+  drop_na()
+```
+
+The number of rows and columns in the homicides data: **`r dim_desc(data)`** 
+The column variables are: **`r colnames(data)`** . The dataset includes information about victim, reported date of homicide, location of homicide, and status of the case. 
+
+```{r}
+summary_data = data |>
   mutate(city_state = paste(city, state, sep="_"), 
          not_solved = if_else(
-           disposition %in% c("Closed without arrest", "Open/No arrest"), 1, 0))  # if match, add 1, otherwise, add 0. 
-summary_data = data |>
+           disposition %in% c("Closed without arrest", "Open/No arrest"), 1, 0))  |> # if match, add 1, otherwise, add 0. 
   group_by(city_state) |>
   summarize(
     total_number_of_homicides = n(), #count
     unsolved_homicides = sum(not_solved) 
   ) #|>
   #knitr::kable()
+head(summary_data)
 ```
 
+
 ```{r}
-summary_data_balti = summary_data |>
-  filter(city_state == "Baltimore_MD") 
-  
-prop_test_out <- prop.test(summary_data_balti$unsolved_homicides, summary_data_balti$total_number_of_homicides) 
+prop_result_baltimore = summary_data |>
+  filter(city_state == "Baltimore_MD") |>
+  mutate(prop_test_out_balti = map2(unsolved_homicides,total_number_of_homicides, \(x,y) prop.test(x,y)),
+  tidy_df = map(prop_test_out_balti,tidy))|> 
+  unnest(tidy_df) |>
+  select(city_state,estimate,conf.low,conf.high) 
 
-tidy(prop_test_out) |> 
-  select(estimate,conf.low,conf.high) 
-
- # mutate(est_prop = estimate[1], 
-  #       low_conf = conf.low[1],
-   #      high_conf = conf.high[1]) 
+prop_result_baltimore |> 
+  knitr::kable()
 ```
 
 ```{r}
@@ -60,50 +67,7 @@ prop_results_all_cities |>
     x = "estimate",
     y = "city and state", 
   )
-  
-  
-
 ```
 
 
-```{r}
-
-```
-
-
-
-```{r}
-listcol_df = summary_data |>
-  tibble(
-    city_state = city_state,
-    homi = list_norms
-  )
-
-list_norms =
-  list(
-    a = rnorm(20, 3, 1),
-    b = rnorm(20, 0, 5),
-    c = rnorm(20, 10, .2),
-    d = rnorm(20, -3, 1)
-  )
-
-output = map(list_norms, mean_and_sd)
-
-output = map2(input_1, input_2, \(x,y) func(arg_1 =
-x, arg_2 = y))
-
-
-listcol_df =
-  tibble(
-    name = c("a", "b", "c", "d"),
-    samp = list_norms
-  )
-
-map(listcol_df$samp, mean_and_sd)
-
-listcol_df =
-  listcol_df |>
-  mutate(summary = map(samp, mean_and_sd))
-listcol_df
-```
 

@@ -9,6 +9,7 @@ date: "2024-11-05"
 library(tidyverse)
 library(purrr)
 library(broom)
+library(ggplot2)
 ```
 
 ```{r}
@@ -51,8 +52,13 @@ sim_results_df_b =
 sim_results_df_all <- bind_rows(sim_results_df,sim_results_df_b)
 ```
 
-As shown in the plot below, as true mu increases, the power of the test increased and reached 1. 
+As shown in the plot below, as the true value of mu increases, the power of the test also increases and reaches 1. 
+
+
 effect size is defined as the difference between sample mean  and hypothesized mean(mu = 0). Therefore, as true mean increases, the effect size increases, the power of the test also increases and test is more likely to correctly reject the null hypothesis. 
+
+
+
 
 ```{r}
 new_df = sim_results_df_all |>
@@ -91,3 +97,63 @@ ggplot(new_df_b, aes(x = mu_given))+
 
 ```
 
+
+## problem3
+
+```{r}
+#read data
+data = read_csv("./data/homicide-data.csv") |>
+  janitor::clean_names() |>
+  drop_na()
+```
+
+The number of rows and columns in the homicides data: **`r dim_desc(data)`** 
+The column variables are: **`r colnames(data)`** . The dataset includes information about victim, reported date of homicide, location of homicide, and status of the case. 
+
+```{r}
+summary_data = data |>
+  mutate(city_state = paste(city, state, sep="_"), 
+         not_solved = if_else(
+           disposition %in% c("Closed without arrest", "Open/No arrest"), 1, 0))  |> # if match, add 1, otherwise, add 0. 
+  group_by(city_state) |>
+  summarize(
+    total_number_of_homicides = n(), #count
+    unsolved_homicides = sum(not_solved) 
+  ) #|>
+  #knitr::kable()
+head(summary_data)
+```
+
+```{r}
+#baltimore prop test
+summary_data_baltimore = summary_data |>
+  filter(city_state == "Baltimore_MD") 
+
+prop_test_out_balti = prop.test(summary_data_baltimore$unsolved_homicides,summary_data_baltimore$total_number_of_homicides)
+
+tidy(prop_test_out) |>
+  select(estimate,conf.low,conf.high) |>
+  knitr::kable()
+         
+```
+
+```{r}
+#all cities prop test
+prop_results_all_cities = summary_data |>
+  mutate(prop_test_out_all = map2(unsolved_homicides,total_number_of_homicides, \(x,y) prop.test(x,y)),
+         tidy_df = map(prop_test_out_all,tidy))|>
+  unnest(tidy_df) |>
+  select(city_state,estimate,conf.low,conf.high)
+  
+prop_results_all_cities |>
+ mutate(city_state = fct_reorder(city_state,estimate)) |>
+  ggplot(aes(x = city_state, y = estimate)) + 
+  geom_point(color="purple") +
+  geom_errorbar(aes(ymin=conf.low, ymax = conf.high), color = "orange") +
+  coord_flip() + #to facilitate the viewing - otherwise - x-axis crowded
+  labs(
+    title = "proportion of unsolved homicides",
+    x = "estimate",
+    y = "city and state", 
+  )
+```
