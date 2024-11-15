@@ -15,11 +15,19 @@ library(broom)
 #read data
 data = read_csv("./data/homicide-data.csv") |>
   janitor::clean_names() |>
+  drop_na() |>
   mutate(city_state = paste(city, state, sep="_"), 
          not_solved = if_else(
-           disposition %in% c("Closed without arrest", "Open/No arrest"), 1, 0))  
-         
+           disposition %in% c("Closed without arrest", "Open/No arrest"), 1, 0))  # if match, add 1, otherwise, add 0. 
+```
+
+```{r}
 data |>
-  group_by(city_state)
+  group_by(city_state) |>
+  summarize(
+    number_of_homicides = n(), #count
+    not_solved_homicides = sum(not_solved) #sum
+  ) |>
+  knitr::kable()
 ```
 
