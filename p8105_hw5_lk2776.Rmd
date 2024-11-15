@@ -5,12 +5,6 @@ date: "2024-11-05"
 ---
 
 #Problem 2 
-Fix𝑛 = 30
-Fix 𝜎 = 5
-Set 𝜇 = 0. Generate 5000 datasets from the model
-𝑥 ∼ 𝑁𝑜𝑟𝑚𝑎𝑙[𝜇, 𝜎]
-For each dataset, save 𝜇̂ and the p-value arising from a test of 𝐻 : 𝜇 = 0 using 𝛼 = 0.05.
-Hint: to obtain the estimate and p-value, use broom::tidy to clean the output of t.test .
 
 ```{r}
 library(tidyverse)
@@ -43,7 +37,6 @@ sim_results_df =
   unnest(estimate_df)
 ```
 
-Repeat the above for 𝜇 = {1, 2, 3, 4, 5, 6}
 
 ```{r}
 #Run function on data 
@@ -60,17 +53,14 @@ sim_results_df_b =
 sim_results_df_all <- bind_rows(sim_results_df,sim_results_df_b)
 ```
 
-The plot below shows the 
-
-As true mu increases, the power of the test increased and reached 1. . 
-effect size = sample mean - hypothesized mean(mu = 0)
-as true mean increases, the effect size increases, the power of the test also increases and test is more likely to correctly reject the null hypothesis. 
+As shown in the plot below, as true mu increases, the power of the test increased and reached 1. 
+effect size is defined as the difference between sample mean  and hypothesized mean(mu = 0). Therefore, as true mean increases, the effect size increases, the power of the test also increases and test is more likely to correctly reject the null hypothesis. 
 
 ```{r}
 new_df = sim_results_df_all |>
   mutate(reject_null = p.value < 0.05) |>
   group_by(mu_given) |>
-  summarise(power_calc = mean(reject_null)) #power for each value of mu 
+  summarise(power_calc = mean(reject_null)) #power for each value of mu # proportion of times the null was rejected. 
   
 ggplot(new_df,aes(x = mu_given, y = power_calc)) +
   geom_point() +
@@ -82,18 +72,17 @@ ggplot(new_df,aes(x = mu_given, y = power_calc)) +
   )
 ```
 
+
 ```{r}
 new_df_b = sim_results_df_b |>
   group_by(mu_given) |>
   summarize(
-    mean_mu_hat = mean(estimate),
-    mean_mu_hat_rejected = mean(estimate[p.value <0.05]))
-
-
+    avg_mu_hat = mean(estimate),
+    avg_mu_hat_rejected = mean(estimate[p.value <0.05]))
 
 ggplot(new_df_b, aes(x = mu_given))+
-  geom_line(aes(y=mean_mu_hat),color="blue", size = 1) +
-  geom_line(aes(y=mean_mu_hat_rejected), color="orange", size =1)+
+  geom_line(aes(y=avg_mu_hat),color="blue", size = 1) +
+  geom_line(aes(y=avg_mu_hat_rejected), color="orange", size =1)+
   labs(
     title = "average mu-hat vs true mu",
     x = "true mu",
