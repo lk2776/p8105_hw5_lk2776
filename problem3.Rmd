@@ -22,12 +22,26 @@ data = read_csv("./data/homicide-data.csv") |>
 ```
 
 ```{r}
-data |>
+summary_data = data |>
   group_by(city_state) |>
   summarize(
-    number_of_homicides = n(), #count
-    not_solved_homicides = sum(not_solved) #sum
-  ) |>
-  knitr::kable()
+    total_number_of_homicides = n(), #count
+    unsolved_homicides = sum(not_solved) #sum
+  ) #|>
+  #knitr::kable()
+```
+
+```{r}
+summary_data_balti = summary_data |>
+  filter(city_state == "Baltimore_MD") 
+  
+prop.test(summary_data_balti$unsolved_homicides, summary_data_balti$total_number_of_homicides) |>
+  tidy() |> 
+  select(estimate,conf.low,conf.high) 
+
+
+ # mutate(est_prop = estimate[1], 
+  #       low_conf = conf.low[1],
+   #      high_conf = conf.high[1]) 
 ```
 
