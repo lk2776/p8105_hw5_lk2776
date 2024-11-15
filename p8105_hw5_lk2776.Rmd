@@ -5,7 +5,6 @@ date: "2024-11-05"
 ---
 
 #Problem 2 
-
 ```{r}
 library(tidyverse)
 library(purrr)
@@ -24,8 +23,7 @@ sim_mean_sd = function(n =30, mu, sigma = 5) {
   tidy(t_test_out)|>
     select(estimate, p.value) 
 }
-
-#Run function on data u = 0
+#Run function on data mu = 0
 sim_results_df =
   expand_grid(
     mu_given = 0,
@@ -72,7 +70,7 @@ ggplot(new_df,aes(x = mu_given, y = power_calc)) +
   )
 ```
 
-
+As shown in the plot below, the sample average of mu-hat across tests for which is rejected is not to equal to true value of mu at low value of mu. 
 ```{r}
 new_df_b = sim_results_df_b |>
   group_by(mu_given) |>

@@ -1,0 +1,12 @@
+---
+title: "problem3"
+output: html_document
+date: "2024-11-15"
+---
+
+```{r}
+library(tidyverse)
+library(purrr)
+library(broom)
+```
+
