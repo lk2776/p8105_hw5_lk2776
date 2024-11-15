@@ -3,14 +3,33 @@ title: "p8105_hw5_lk2776"
 output: html_document
 date: "2024-11-05"
 ---
-
-#Problem 2 
-```{r}
+```{r setup, warning=FALSE,message=FALSE}
+#load packages
 library(tidyverse)
+library(ggridges)
+library(patchwork)
 library(purrr)
 library(broom)
 library(ggplot2)
+
+#R figure settings
+knitr::opts_chunk$set(
+  fig.width = 9,
+  fig.asp = .6,
+  out.width = "90%"
+)
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 ```
+
+#Problem 2 
 
 ```{r}
 #function
@@ -52,12 +71,7 @@ sim_results_df_b =
 sim_results_df_all <- bind_rows(sim_results_df,sim_results_df_b)
 ```
 
-As shown in the plot below, as the true value of mu increases, the power of the test also increases and reaches 1. 
-
-
-effect size is defined as the difference between sample mean  and hypothesized mean(mu = 0). Therefore, as true mean increases, the effect size increases, the power of the test also increases and test is more likely to correctly reject the null hypothesis. 
-
-
+As shown in the plot below, as the true value of mu increases, the power of the test also increases, reaching 1. Effect size is defined as the difference between sample mean and the hypothesized mean(mu = 0). Therefore, as the true mean increases, the effect size becomes larger. This increase in effect size, increases the ability of the test to correctly detect the true effect and correctly reject the null hypothesis. As a result, power of the test also increases with larger true mean values. 
 
 
 ```{r}
