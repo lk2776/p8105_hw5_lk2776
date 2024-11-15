@@ -14,9 +14,12 @@ b_day_func = function(group_size) {
   #random birthday generation for each group
   sim_b_data = tibble(
     b_days = sample(1:365, group_size, replace=TRUE))
-
+  
+  any(duplicated(sim_b_data$b_days))
 }
 
 b_day_func(5)
+b_day_func(15)
+b_
 ```
 
