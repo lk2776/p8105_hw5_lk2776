@@ -45,3 +45,75 @@ tidy(prop_test_out) |>
    #      high_conf = conf.high[1]) 
 ```
 
+```{r}
+
+
+prop_results_all_cities = summary_data |>
+  mutate(prop_test_out_all = map2(unsolved_homicides,total_number_of_homicides, \(x,y) prop.test(x,y))) |>
+  #unnest(prop_test_out_all) 
+  mutate(tidy_df = map(prop_test_out_all,tidy)) |>
+  unnest(tidy_df) |>
+  select(city_state,estimate,conf.low,conf.high)
+  
+  
+  
+  
+  #tidy()
+  #unnest()
+  
+
+```
+
+
+```{r}
+prop_results_all_cities |>
+ mutate(city_state = fct_reorder(city_state,estimate)) |>
+  ggplot(df_10, aes(x = city_state, y = estimate)) + 
+  geom_point(color="purple") +
+  geom_errorbar(aes(ymin=conf.low, ymax = conf.high), color = "orange") +
+  coord_flip() |>
+  labs(
+    title = "average mu-hat vs true mu",
+    x = "true mu",
+    y = "average mu-hat", 
+  )
+  
+```
+
+
+
+```{r}
+listcol_df = summary_data |>
+  tibble(
+    city_state = city_state,
+    homi = list_norms
+  )
+
+list_norms =
+  list(
+    a = rnorm(20, 3, 1),
+    b = rnorm(20, 0, 5),
+    c = rnorm(20, 10, .2),
+    d = rnorm(20, -3, 1)
+  )
+
+output = map(list_norms, mean_and_sd)
+
+output = map2(input_1, input_2, \(x,y) func(arg_1 =
+x, arg_2 = y))
+
+
+listcol_df =
+  tibble(
+    name = c("a", "b", "c", "d"),
+    samp = list_norms
+  )
+
+map(listcol_df$samp, mean_and_sd)
+
+listcol_df =
+  listcol_df |>
+  mutate(summary = map(samp, mean_and_sd))
+listcol_df
+```
+
