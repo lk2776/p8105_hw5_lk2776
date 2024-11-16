@@ -60,8 +60,8 @@ sim_results_df_p1 =
 
 ```{r}
 ggplot(sim_results_df_p1,aes(x = group_sizes, y = prob_dup)) + 
-       geom_point(color="purple") + 
-         geom_line(color="darksalmon") +
+       geom_point(color="blue") + 
+         geom_line(color="orange") +
   labs(
     title = "probablity of duplicate birthdays vs group size",
     x = "group size",
