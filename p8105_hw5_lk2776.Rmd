@@ -29,13 +29,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
----
-title: "p1"
-output: html_document
-date: "2024-11-15"
----
-
-#problem1 
+## problem1 
 
 ```{r}
 b_day_func = function(group_size) {
@@ -62,7 +56,9 @@ sim_results_df_p1 =
    group_by(group_sizes) |>
   summarize(prob_dup = mean(output_p1)) 
 
+```
 
+```{r}
 ggplot(sim_results_df_p1,aes(x = group_sizes, y = prob_dup)) + 
        geom_point(color="salmon") + 
          geom_line(color="cyan3") +
@@ -71,11 +67,9 @@ ggplot(sim_results_df_p1,aes(x = group_sizes, y = prob_dup)) +
     x = "group size",
     y = "prob of duplicate birthdays"
   )
-
 ```
 
-
-#problem 2 
+## problem 2 
 
 ```{r}
 #function
