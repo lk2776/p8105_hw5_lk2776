@@ -29,6 +29,53 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+---
+title: "p1"
+output: html_document
+date: "2024-11-15"
+---
+
+#problem1 
+
+```{r}
+b_day_func = function(group_size) {
+  #random birthday generation for each group
+  sim_b_data = sample(1:365, group_size, replace=TRUE)
+  
+  any(duplicated(sim_b_data)) #check - one output 
+}
+
+b_day_func(1)
+b_day_func(100)
+
+```
+
+
+```{r}
+sim_results_df_p1 = 
+  expand_grid(
+    group_sizes = seq(2,50),
+    iter = 1:10000) |>
+  mutate(
+    output_p1 = map_lgl(group_sizes, \(x) b_day_func(x))
+    ) |>
+   group_by(group_sizes) |>
+  summarize(prob_dup = mean(output_p1)) 
+
+
+ggplot(sim_results_df_p1,aes(x = group_sizes, y = prob_dup)) + 
+       geom_point(color="aquamarine3") + 
+         geom_line(color="orange") +
+  labs(
+    title = "probablity of duplicate birthdays vs group size",
+    x = "group size",
+    y = "prob of duplicate birthdays"
+  )
+#plot_data = sim_results_df_p1 |>
+
+```
+
+
 #problem 2 
 
 ```{r}
