@@ -12,40 +12,37 @@ Write a function that, for a fixed group size, randomly draws “birthdays” fo
 ```{r}
 b_day_func = function(group_size) {
   #random birthday generation for each group
-  sim_b_data = tibble(
-    b_days = sample(1:365, group_size, replace=TRUE))
+  sim_b_data = sample(1:365, group_size, replace=TRUE)
   
-  any(duplicated(sim_b_data$b_days)) #check - one output 
+  any(duplicated(sim_b_data)) #check - one output 
 }
 
 b_day_func(1)
-b_day_func(5)
-b_day_func(10)
+b_day_func(100)
 
 ```
 
 Next, run this function 10000 times for each group size between 2 and 50. For each group size, compute the probability that at least two people in the group will share a birthday by averaging across the 10000 simulation runs. Make a plot showing the probability as a function of group size, and comment on your results.
 
 ```{r}
-group_sizes = seq(2,50)
-iter = 1:10000
-
 sim_results_df_p1 = 
   expand_grid(
     group_sizes = seq(2,50),
-    iter = 1:10000
-  ) |>
+    iter = 1:10000) |>
   mutate(
-    output_p1 = map(group_sizes, b_day_func)
+    output_p1 = map_lgl(group_sizes, \(x) b_day_func(x))
     ) |>
-  unnest(output_p1)
-
-plot_data = sim_results_df_p1 |>
-  group_by(group_sizes) |>
-  summarize(prob_dup = mean(output_p1)) 
-
-ggplot(plot_data,aes(x = group_sizes, y = prob_dup)) + 
+   group_by(group_sizes) |>
+  summarize(prob_dup = mean(output_p1)) |>
+  ggplot(aes(x = group_sizes, y = prob_dup)) + 
        geom_point(color="blue") + 
-         geom_line(color="orange")
+         geom_line(color="orange") +
+  labs(
+    title = "probablity of duplicate birthdays vs group size",
+    x = "group size",
+    y = "prob of duplicate birthdays"
+  )
+#plot_data = sim_results_df_p1 |>
+
 ```
 
